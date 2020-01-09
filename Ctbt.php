@@ -9,27 +9,27 @@ class Ctbc
     /**
      * 特定代號
      */
-	private $MerchantID;
+    private $MerchantID;
 
     /**
      * 終端機代號
      */
-	private $TerminalID;
+    private $TerminalID;
 
     /**
      * 專用代號
      */
-	private $merId;
+    private $merId;
 
     /**
      * 貴特店在URL帳務管理後台登錄的壓碼字串
      */
-	private $Key;
+    private $Key;
 
     /**
      * 商店名稱
      */
-	private $MerchantName;
+    private $MerchantName;
 
     /**
      * Server端回傳驗證位置
@@ -44,7 +44,7 @@ class Ctbc
      * 紅利折抵一般交易 : 2
      * 紅利折抵分期交易 : 4
      */
-	private $txType;
+    private $txType;
 
     /**
      * 交易方式敘述
@@ -54,7 +54,7 @@ class Ctbc
      * 紅利交易 : 填寫固定兩碼的商品代碼
      * 紅利分期 : 填寫四碼，1-2碼為產品代碼，3-4碼為分期期數
      */
-	private $Option;
+    private $Option;
 
     /**
      * 請款方式
@@ -70,22 +70,22 @@ class Ctbc
      * 不開 : 0
      * 開 : 1
      */
-	private $debug;
+    private $debug;
 
     /**
      * 訂單編號
      */
-	private $lidm;
+    private $lidm;
 
     /**
      * 消費金額
      */
-	private $purchAmt;
+    private $purchAmt;
 
     /**
      * 訂單描述
      */
-	private $OrderDetail = '';
+    private $OrderDetail = '';
 
     /**
      * 語系
@@ -95,14 +95,14 @@ class Ctbc
      * 英文 : 3
      * 客製化頁面 : 5
      */
-	private $Customize;
+    private $Customize;
 
 
     /**
      * 傳送位置
      */
-	// private $test_url = "https://testepos.ctbcbank.com/auth/SSLAuthUI.jsp";
-	private $online_url = "https://epos.chinatrust.com.tw/auth/SSLAuthUI.jsp";
+    // private $test_url = "https://testepos.ctbcbank.com/auth/SSLAuthUI.jsp";
+    private $online_url = "https://epos.chinatrust.com.tw/auth/SSLAuthUI.jsp";
 
     /**
      * Ctbt Construct

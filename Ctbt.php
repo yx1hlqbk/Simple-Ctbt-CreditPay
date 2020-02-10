@@ -125,8 +125,8 @@ class Ctbc
      *
      * @param Array $config
      */
-	public function init($config)
-	{
+    public function init($config)
+    {
         if (empty($config)) {
             die('請先填入變數。');
         }
@@ -134,71 +134,66 @@ class Ctbc
         foreach ($config as $key => $value) {
             $this->$key = $value;
         }
-	}
+    }
 
     /**
      * Ctbt 付款
      *
      * @param Array $config
      */
-	public function pay($config = [])
-	{
+    public function pay($config = [])
+    {
         $this->init($config);
-
-		$URLEnc = $this->encryptCode();
-
-		$html = '
-            <p>頁面轉向中，請稍後...</p>
-            <form name="autoForm" method="post" action="'.$this->online_url.'">
-                <input type="hidden" value="'.$this->merId.'" name="merID" />
-                <input type="hidden" value="'.$URLEnc.'" name="URLEnc" length="100" />
-            </form>
-            <script>autoForm.submit();</script>';
-
-		echo $html;
-	}
+        $URLEnc = $this->encryptCode();
+        $html = '
+        <p>頁面轉向中，請稍後...</p>
+        <form name="autoForm" method="post" action="'.$this->online_url.'">
+            <input type="hidden" value="'.$this->merId.'" name="merID" />
+            <input type="hidden" value="'.$URLEnc.'" name="URLEnc" length="100" />
+        </form>
+        <script>autoForm.submit();</script>';
+        echo $html;
+    }
 
     /**
      * 壓密資料
      */
-	private function encryptCode()
-	{
-		$MACString = auth_in_mac($this->MerchantID,$this->TerminalID,$this->lidm,$this->purchAmt,
-		$this->txType,$this->Option,$this->Key,$this->MerchantName,$this->AuthResURL,
-		$this->OrderDetail,$this->AutoCap,$this->Customize,$this->debug);
-
-		$URLEnc = get_auth_urlenc($this->MerchantID,$this->TerminalID,$this->lidm,$this->purchAmt,
-		$this->txType,$this->Option,$this->Key,$this->MerchantName,$this->AuthResURL,
-		$this->OrderDetail,$this->AutoCap,$this->Customize,$MACString,$this->debug);
-
-		return $URLEnc;
-	}
+    private function encryptCode()
+    {
+        $MACString = auth_in_mac($this->MerchantID,$this->TerminalID,$this->lidm,$this->purchAmt,
+        $this->txType,$this->Option,$this->Key,$this->MerchantName,$this->AuthResURL,
+        $this->OrderDetail,$this->AutoCap,$this->Customize,$this->debug);
+        $URLEnc = get_auth_urlenc($this->MerchantID,$this->TerminalID,$this->lidm,$this->purchAmt,
+        $this->txType,$this->Option,$this->Key,$this->MerchantName,$this->AuthResURL,
+        $this->OrderDetail,$this->AutoCap,$this->Customize,$MACString,$this->debug);
+        return $URLEnc;
+    }
 
     /**
      * 回傳資料驗證
      */
-	public function returnVerification()
-	{
-		$EncArray = gendecrypt($_POST['URLResEnc'],$this->Key, $this->debug);
+    public function returnVerification()
+    {
+        $EncArray = gendecrypt($_POST['URLResEnc'],$this->Key, $this->debug);
 
-		$status = isset($EncArray['status']) ? $EncArray['status'] : "";
-		$errCode = isset($EncArray['errcode']) ? $EncArray['errcode'] : "";
-		$authCode = isset($EncArray['authcode']) ? $EncArray['authcode'] : "";
-		$authAmt = isset($EncArray['authamt']) ? $EncArray['authamt'] : "";
-		$lidm = isset($EncArray['lidm']) ? $EncArray['lidm'] : "";
-		$OffsetAmt = isset($EncArray['offsetamt']) ? $EncArray['offsetamt'] : "";
-		$OriginalAmt = isset($EncArray['originalamt']) ? $EncArray['originalamt'] : "";
-		$UtilizedPoint = isset($EncArray['utilizedpoint']) ? $EncArray['utilizedpoint'] : "";
-		$Option = isset($EncArray['numberofpay']) ? $EncArray['numberofpay'] : "";
-		$Last4digitPAN = isset($EncArray['last4digitpan']) ? $EncArray['last4digitpan'] : "";
-		$pidResult= isset($EncArray['pidResult']) ? $EncArray['pidResult'] : "";
-		$CardNumber = isset($EncArray['CardNumber']) ? $EncArray['CardNumber'] : "";
+        $status = isset($EncArray['status']) ? $EncArray['status'] : "";
+        $errCode = isset($EncArray['errcode']) ? $EncArray['errcode'] : "";
+        $authCode = isset($EncArray['authcode']) ? $EncArray['authcode'] : "";
+        $authAmt = isset($EncArray['authamt']) ? $EncArray['authamt'] : "";
+        $lidm = isset($EncArray['lidm']) ? $EncArray['lidm'] : "";
+        $OffsetAmt = isset($EncArray['offsetamt']) ? $EncArray['offsetamt'] : "";
+        $OriginalAmt = isset($EncArray['originalamt']) ? $EncArray['originalamt'] : "";
+        $UtilizedPoint = isset($EncArray['utilizedpoint']) ? $EncArray['utilizedpoint'] : "";
+        $Option = isset($EncArray['numberofpay']) ? $EncArray['numberofpay'] : "";
+        $Last4digitPAN = isset($EncArray['last4digitpan']) ? $EncArray['last4digitpan'] : "";
+        $pidResult= isset($EncArray['pidResult']) ? $EncArray['pidResult'] : "";
+        $CardNumber = isset($EncArray['CardNumber']) ? $EncArray['CardNumber'] : "";
 
-		$MACString = auth_out_mac($status,$errCode,$authCode,$authAmt,
-		$lidm,$OffsetAmt,$OriginalAmt,$UtilizedPoint,$Option,$Last4digitPAN,
-		$this->Key,$this->debug);
+        $MACString = auth_out_mac($status,$errCode,$authCode,$authAmt,
+        $lidm,$OffsetAmt,$OriginalAmt,$UtilizedPoint,$Option,$Last4digitPAN,
+        $this->Key,$this->debug);
 
-		if ($MACString==$EncArray['outmac']) {
+        if ($MACString==$EncArray['outmac']) {
             if ($EncArray['status'] == '0') {
                 return [
                     'status'=> 'Y',
@@ -215,14 +210,14 @@ class Ctbc
                     'message' => $EncArray['errdesc']
                 ];
             }
-		}
-		else {
-			return [
+        }
+        else {
+            return [
                 'status'=> 'N',
-				'message' => '刷卡失敗。'
+                'message' => '刷卡失敗。'
             ];
-		}
-	}
+        }
+    }
 
 	// status=>  狀態 0=成功
 	// errcode=> 錯誤編號 00=成功
